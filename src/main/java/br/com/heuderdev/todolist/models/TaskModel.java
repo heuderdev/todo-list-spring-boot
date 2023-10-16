@@ -4,6 +4,7 @@ package br.com.heuderdev.todolist.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -25,6 +26,7 @@ public class TaskModel {
     private String description;
 
     @Column(length = 50)
+    @Size(max = 50, min = 1)
     @NotNull
     @NotEmpty
     private String title;

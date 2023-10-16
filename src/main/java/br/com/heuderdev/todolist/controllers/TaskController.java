@@ -24,9 +24,9 @@ public class TaskController {
     @PostMapping
     public ResponseEntity create(@Valid @RequestBody TaskModel taskModel, HttpServletRequest request) {
 
-        if (taskModel.getTitle().length() > 50) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{O titulo tem mais que 50 caracteres}");
-        }
+//        if (taskModel.getTitle().length() > 50) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{O titulo tem mais que 50 caracteres}");
+//        }
 
         var user_id = request.getAttribute("user_id");
 
@@ -50,13 +50,23 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}")
-    public TaskModel update(@RequestBody TaskModel taskModel, @PathVariable Long id, HttpServletRequest request) {
+    public ResponseEntity update(@RequestBody TaskModel taskModel, @PathVariable Long id, HttpServletRequest request) {
+
+        var user_id = request.getAttribute("user_id");
 
         var task = this.repository.findById(id).orElse(null);
 
-        Utils.copyNonNullProperties(taskModel, task);
+        if(task == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Tarefa não encontrada!");
+        }
 
-        return this.repository.save(task);
+        if(!task.getUserId().equals(user_id)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário não tem permissão para alterar essa tarefa.");
+        }
+
+        Utils.copyNonNullProperties(taskModel, task);
+        var newTask =  this.repository.save(task);
+        return ResponseEntity.status(HttpStatus.OK).body(newTask);
 
     }
 }

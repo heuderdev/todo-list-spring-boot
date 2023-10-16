@@ -18,7 +18,6 @@ public class ValidationExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public Map<String, String> handleValidationException(MethodArgumentNotValidException ex) {
-        System.out.println("opaaaaaaaaaaaaaaa");
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
