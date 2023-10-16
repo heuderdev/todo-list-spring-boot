@@ -2,6 +2,8 @@ package br.com.heuderdev.todolist.models;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -15,17 +17,25 @@ public class TaskModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long user_id;
+    @Column(name = "userId")
+    private Long userId;
 
+    @NotNull
+    @NotEmpty
     private String description;
 
     @Column(length = 50)
+    @NotNull
+    @NotEmpty
     private String title;
 
     private LocalDateTime start_at;
 
+
     private LocalDateTime end_at;
 
+    @NotNull
+    @NotEmpty
     private String priority;
 
     @CreationTimestamp
